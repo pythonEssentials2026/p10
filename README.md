@@ -1,5 +1,7 @@
 # ESP8266 P10 LED Panels
 
+https://devstem.org/arduino-course/projects/esp8266-p10-led-panels/
+
 Welcome to the Scrolling Text LED Display project! This repository contains all the necessary code and documentation to create a dynamic scrolling text display using the ESP8266 and P10 LED panels. This project is perfect for anyone looking to create eye-catching signage for businesses, educational purposes, or personal use. The display can be customized to show any message, making it incredibly versatile for various applications.
 
 Features
