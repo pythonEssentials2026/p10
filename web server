@@ -5,7 +5,7 @@
 #include <ESP8266WebServer.h>
 
 // Wi-Fi Credentials
-const char* ssid = "Surinlearninglab-2.4G";     // Replace with your Wi-Fi SSID
+const char* ssid = "***************";     // Replace with your Wi-Fi SSID
 const char* password = "*********"; // Replace with your Wi-Fi password
 
 // SETUP DMD
