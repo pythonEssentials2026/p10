@@ -1,0 +1,105 @@
+#include <DMDESP.h>
+#include <fonts/ElektronMart6x12.h>
+#include <Wire.h>
+#include <ESP8266WiFi.h>
+#include <ESP8266WebServer.h>
+
+// Wi-Fi Credentials
+const char* ssid = "Surinlearninglab-2.4G";     // Replace with your Wi-Fi SSID
+const char* password = "*********"; // Replace with your Wi-Fi password
+
+// SETUP DMD
+#define DISPLAYS_WIDE 2  // Column
+#define DISPLAYS_HIGH 1  // Row
+
+// Number of P10 Panels used (COLUMN, ROW)
+DMDESP Disp(DISPLAYS_WIDE, DISPLAYS_HIGH);
+
+// Web Server
+ESP8266WebServer server(80);
+
+// Global variable for scrolling text
+String scrollingText = "SurinLearningLab.com    090-912-7265     BUILD + CODE + CREATE  Learn Coding in English at Surin Learning Lab!";
+
+void setup() {
+  Serial.begin(9600);  // Start serial communication
+  Disp.start();
+  Disp.setBrightness(255);
+  Disp.setFont(ElektronMart6x12);
+
+  // Connect to Wi-Fi
+  Serial.println("Connecting to Wi-Fi...");
+  WiFi.begin(ssid, password);
+
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+
+  Serial.println("\nWi-Fi connected!");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP()); // Print the local IP address
+
+  // Set up the web server routes
+  server.on("/", handleRoot);
+  server.on("/update", handleUpdate);
+
+  server.begin();
+  Serial.println("Web server started!");
+}
+
+void loop() {
+  Disp.loop();  // Run Disp loop to refresh LED
+  server.handleClient();  // Handle incoming HTTP requests
+  TeksJalan(0, 30);  // y position, speed;
+}
+
+// SCROLLING TEKS
+void TeksJalan(int y, uint8_t kecepatan) {
+  static uint32_t pM;
+  static uint32_t x;
+  int width = Disp.width();
+  int height = Disp.height();
+
+  Disp.setFont(ElektronMart6x12);
+  int textWidth = Disp.textWidth(scrollingText.c_str());
+
+  if ((millis() - pM) > kecepatan) {
+    pM = millis();
+    if (x < textWidth + width) {
+      ++x;
+    } else {
+      x = 0;
+      return;
+    }
+    Disp.drawText(width - x, (height / 2) - 6, scrollingText.c_str());  // Center the text vertically
+  }
+}
+
+// Web server handlers
+void handleRoot() {
+  String html = R"rawliteral(
+    <!DOCTYPE html>
+    <html>
+    <head><title>Update Text</title></head>
+    <body>
+      <h1>Update Scrolling Text</h1>
+      <form action="/update" method="get">
+        <input type="text" name="text" placeholder="Enter new text" style="width:300px;">
+        <button type="submit">Update</button>
+      </form>
+    </body>
+    </html>
+  )rawliteral";
+  server.send(200, "text/html", html);
+}
+
+void handleUpdate() {
+  if (server.hasArg("text")) {
+    scrollingText = server.arg("text");  // Update the scrolling text
+    server.send(200, "text/plain", "Text updated! Go back to update again.");
+    Serial.println("Updated text: " + scrollingText);
+  } else {
+    server.send(400, "text/plain", "No text received!");
+  }
+}
