@@ -19,7 +19,7 @@ DMDESP Disp(DISPLAYS_WIDE, DISPLAYS_HIGH);
 ESP8266WebServer server(80);
 
 // Global variable for scrolling text
-String scrollingText = "SurinLearningLab.com    090-912-7265     BUILD + CODE + CREATE  Learn Coding in English at Surin Learning Lab!";
+String scrollingText = "pythonessentials.com         BUILD + CODE + CREATE    devstem.org/arduino-course ";
 
 void setup() {
   Serial.begin(9600);  // Start serial communication
