@@ -26,7 +26,7 @@ void loop() {
 }
 
 // SCROLLING TEKS
-static char *teks[] = { "SurinLearningLab.com    090-912-7265     BUILD + CODE + CREATE  Learn Coding in English at Surin Learning Lab!" };
+static char *teks[] = { "pythonessentials.com         BUILD + CODE + CREATE    devstem.org/arduino-course " };
 
 void TeksJalan(int y, uint8_t kecepatan) {
   static uint32_t pM;
